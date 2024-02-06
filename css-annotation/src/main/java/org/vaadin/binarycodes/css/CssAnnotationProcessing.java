@@ -10,12 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.dom.Element;
 
+import static java.lang.StringTemplate.STR;
+
 public final class CssAnnotationProcessing {
-    private static final String SCOPED_TEMPLATE = """
-            @scope   {
-                %s
-            }
-            """;
     private static final Logger LOGGER = LoggerFactory.getLogger(CssAnnotationProcessing.class);
 
     private CssAnnotationProcessing() {
@@ -58,7 +55,11 @@ public final class CssAnnotationProcessing {
     }
 
     private static void addStyleContentToComponent(final HasElement component, final String styleContent) {
-        var styleToInject = String.format(SCOPED_TEMPLATE, styleContent);
+        var styleToInject = STR."""
+                @scope   {
+                    \{styleContent}
+                }
+                """;
         final var styleEl = new Element("style");
         styleEl.setText(styleToInject);
         component.getElement().appendChild(styleEl);
